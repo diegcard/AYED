@@ -1,0 +1,131 @@
+
+class Node:
+    def __init__(self, value, nxt = None):
+        self.setValue(value)
+        self.setNext(nxt)
+    def setValue(self, value):
+        self.value = value
+    def setNext(self, node):
+        if isinstance(node, Node) or node is None:
+            self.next = node
+        else:
+            raise "Type not supported"
+    def getValue(self):
+        return self.value
+    def getNext(self):
+        return self.next
+    def clear(self):
+        self.setValue(None)
+        self.setNext(None)
+    def __str__(self):
+        return ""+str(self.getValue())+\
+                ("," +str(self.next) if self.next else '')
+
+
+
+
+class LinkedList:
+    def __init__(self, elements = []):
+        self.size = 0
+        self.head = None
+        self.tail = None
+        for e in elements:
+            self.insert(e)
+    def insert(self, val):
+        #Construir el nodo
+        toInsert = Node(val)
+        if self.isEmpty():
+            self.head, self.tail = toInsert, toInsert
+        else:
+            current = self.tail
+            current.setNext(toInsert)
+            self.tail = toInsert
+        self.size += 1
+    def search(self, value):
+        if self.isEmpty():
+            raise "List is empty"
+        current, found = self.head, False
+        while not found and current is not None:
+            if current.getValue() == value:
+                found = True
+            else:
+                current = current.getNext()
+        return current
+    def isEmpty(self):
+        return self.head is None and self.tail is None
+    def mergeList(self, lst):
+        if isinstance(lst, LinkedList):
+            if not lst.isEmpty():
+                self.tail.setNext(lst.head)
+                self.tail = lst.tail
+            self.size += lst.size
+        else:
+            raise "Cannot merge different object types"
+    def mergeListExt(self, value, lst):
+        if not isinstance(lst, LinkedList):
+            raise "Cannot merge different object types"
+        node = self.search(value)
+        if node is None:
+            raise "Value not found"
+        elif node == self.tail:
+            self.mergeList(lst)
+        else:
+            if not lst.isEmpty():
+                nxt = node.getNext()
+                node.setNext(lst.head)
+                lst.tail.setNext(nxt)
+                self.size += lst.size
+                
+    def delete(self, value):
+        if not self.isEmpty():
+            node = self.search(value)
+            if not node is None:
+                prev = self.searchPrev(value)
+                if node != self.head and node!= self.tail:
+                    prev.setNext(node.getNext())
+                if node == self.head:
+                    self.head = node.getNext()
+                if node == self.tail:
+                    self.tail = prev
+                    self.tail.setNext(None)
+                node.clear()
+                self.size -= 1
+            else:
+                raise("Error: element has not been found")
+        else:
+            raise("Error: list is Empty")
+    def searchPrev(self, value):
+        if self.isEmpty():
+            raise "List is empty"
+        current, found = self.head, False
+        while not found and current.next is not None:
+            if current.getNext().getValue() == value:
+                found = True
+            else:
+                current = current.getNext()
+        return current
+    def insertHead(self, value):
+        if not self.isEmpty():
+            node = Node(value)
+            node.setNext(self.head)
+            self.head = node
+            self.size += 1
+        else:
+            self.insert(value)
+        
+    def reverse(self):
+        reverse = LinkedList([])
+        while len(self) > 0:
+            value = self.tail.getValue()
+            reverse.insert(value)
+            self.delete(value)
+        return reverse
+
+    def __len__(self):
+        return self.size
+
+        
+    def __str__(self):
+        return "["+str(self.head)+"]"
+
+

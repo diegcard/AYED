@@ -1,0 +1,234 @@
+from sys import stdin
+
+def posin(matriz):
+    ju_i,ju_j = 0 , 0
+    for i in range(len(matriz)):
+        for j in range(len(matriz[0])):
+            if matriz[i][j] == "w" or matriz[i][j] == "W":
+                ju_i = i
+                ju_j = j
+                break
+    return ju_i,ju_j
+
+def down(matriz):
+    n = len(matriz)
+    ju_i,ju_j = posin(matriz)
+    if matriz[ju_i+1][ju_j] != "#":
+        if matriz[ju_i+1][ju_j] == "b" and matriz[ju_i+2][ju_j] == "b" or matriz[ju_i+1][ju_j] == "b" and matriz[ju_i+2][ju_j] == "#":
+            None
+        elif matriz[ju_i+1][ju_j] == "b":
+            if ju_i+2 < n and matriz[ju_i][ju_j] == "W":
+                matriz[ju_i][ju_j] = "+"
+                matriz[ju_i+1][ju_j] = "w"
+                if matriz[ju_i+2][ju_j] == "+":
+                    matriz[ju_i+2][ju_j] = "B"
+                else:
+                    matriz[ju_i+2][ju_j] = "b"
+            elif ju_i+2 < n:
+                matriz[ju_i][ju_j] = "."
+                matriz[ju_i+1][ju_j] = "w"
+                if matriz[ju_i+2][ju_j] == "+":
+                    matriz[ju_i+2][ju_j] = "B"
+                else:
+                    matriz[ju_i+2][ju_j] = "b"
+
+        elif matriz[ju_i+1][ju_j] == "W" and matriz[ju_i+1][ju_j] == "+":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i+1][ju_j] = "W"
+
+        elif matriz[ju_i][ju_j] == "W":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i+1][ju_j] = "w"
+
+        elif matriz[ju_i+1][ju_j] == "B":
+            matriz[ju_i+2][ju_j] = "b"
+            matriz[ju_i+1][ju_j] = "W"
+            matriz[ju_i][ju_j] = "."
+
+        elif matriz[ju_i+1][ju_j] == ".":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i+1][ju_j] = "w"
+
+        elif matriz[ju_i+1][ju_j] == "+":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i+1][ju_j] = "W"
+    return matriz
+
+def up(matriz):
+    ju_i,ju_j = posin(matriz)
+    if matriz[ju_i-1][ju_j] != "#":
+        if matriz[ju_i-1][ju_j] == "b" and matriz[ju_i-2][ju_j] == "b" or matriz[ju_i-1][ju_j] == "b" and matriz[ju_i-2][ju_j] == "#":
+            None
+        elif matriz[ju_i-1][ju_j] == "b":
+            if ju_i-1 > 0 and matriz[ju_i][ju_j] == "W":
+                matriz[ju_i][ju_j] = "+"
+                matriz[ju_i-1][ju_j] = "w"
+                if matriz[ju_i-2][ju_j] == "+":
+                    matriz[ju_i-2][ju_j] = "B"
+                else:
+                    matriz[ju_i-2][ju_j] = "b"
+            elif ju_i-2 > 0:
+                matriz[ju_i][ju_j] = "."
+                matriz[ju_i-1][ju_j] = "w"
+                if matriz[ju_i-2][ju_j] == "+":
+                    matriz[ju_i-2][ju_j] = "B"
+                else:
+                    matriz[ju_i-2][ju_j] = "b"
+
+        elif matriz[ju_i][ju_j] == "W" and matriz[ju_i-1][ju_j] == "+":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i-1][ju_j] = "W"
+
+        elif matriz[ju_i][ju_j] == "W":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i-1][ju_j] = "w"
+
+        elif matriz[ju_i-1][ju_j] == "B":
+            matriz[ju_i-2][ju_j] = "b"
+            matriz[ju_i-1][ju_j] = "W"
+            matriz[ju_i][ju_j] = "."
+
+        elif matriz[ju_i-1][ju_j] == ".":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i-1][ju_j] = "w"
+
+        elif matriz[ju_i-1][ju_j] == "+":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i-1][ju_j] = "W"
+    return matriz
+
+def left(matriz):
+    ju_i,ju_j = posin(matriz)
+    if matriz[ju_i][ju_j-1] != "#":
+        if matriz[ju_i][ju_j-1] == "b" and matriz[ju_i][ju_j-2] == "b" or matriz[ju_i][ju_j-1] == "b" and matriz[ju_i][ju_j-2] == "#":
+            None
+        elif matriz[ju_i][ju_j-1] == "b":
+            if ju_j-2 > 0 and matriz[ju_i][ju_j] == "W":
+                matriz[ju_i][ju_j] = "+"
+                matriz[ju_i][ju_j-1] = "w"
+                if matriz[ju_i][ju_j-2] == "+":
+                    matriz[ju_i][ju_j-2] = "B"
+                else:
+                    matriz[ju_i][ju_j-2] = "b"
+            elif ju_j-2 > 0:
+                matriz[ju_i][ju_j] = "."
+                matriz[ju_i][ju_j-1] = "w"
+                if matriz[ju_i][ju_j-2] == "+":
+                    matriz[ju_i][ju_j-2] = "B"
+                else:
+                    matriz[ju_i][ju_j-2] = "b"
+
+        elif matriz[ju_i][ju_j] == "W" and matriz[ju_i][ju_j-1] == "+":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i][ju_j-1] = "W"
+
+        elif matriz[ju_i][ju_j] == "W":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i][ju_j-1] = "w"
+
+        elif matriz[ju_i][ju_j-1] == "B":
+            matriz[ju_i][ju_j-2] = "b"
+            matriz[ju_i][ju_j-1] = "W"
+            matriz[ju_i][ju_j] = "."
+
+        elif matriz[ju_i][ju_j-1] == ".":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i][ju_j-1] = "w"
+
+        elif matriz[ju_i][ju_j-1] == "+":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i][ju_j-1] = "W"
+    return matriz
+
+def right(matriz):
+    n = len(matriz)
+    ju_i,ju_j = posin(matriz)
+    if matriz[ju_i][ju_j+1] != "#":
+        if matriz[ju_i][ju_j+1] == "b" and matriz[ju_i][ju_j+2] == "b" or matriz[ju_i][ju_j+1] == "b" and matriz[ju_i][ju_j+2] == "#":
+            None
+        elif matriz[ju_i][ju_j+1] == "b":
+            if ju_j+2 != "#" and matriz[ju_i][ju_j] == "W":
+                matriz[ju_i][ju_j] = "+"
+                matriz[ju_i][ju_j+1] = "w"
+                if matriz[ju_i][ju_j+2] == "+":
+                    matriz[ju_i][ju_j+2] = "B"
+                else:
+                    matriz[ju_i][ju_j+2] = "b"
+            elif ju_j+2 < n:
+                matriz[ju_i][ju_j] = "."
+                matriz[ju_i][ju_j+1] = "w"
+                if matriz[ju_i][ju_j+2] == "+":
+                    matriz[ju_i][ju_j+2] = "B"
+                else:
+                    matriz[ju_i][ju_j+2] = "b"
+                    
+                    
+                    
+        elif matriz[ju_i][ju_j] == "W" and matriz[ju_i][ju_j+1] == "+":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i][ju_j+1] = "W"
+
+        elif matriz[ju_i][ju_j] == "W":
+            matriz[ju_i][ju_j] = "+"
+            matriz[ju_i][ju_j+1] = "w"
+
+        elif matriz[ju_i][ju_j+1] == "B":
+            matriz[ju_i][ju_j+2] = "b"
+            matriz[ju_i][ju_j+1] = "W"
+            matriz[ju_i][ju_j] = "."
+
+        elif matriz[ju_i][ju_j+1] == ".":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i][ju_j+1] = "w"
+
+        elif matriz[ju_i][ju_j+1] == "+":
+            matriz[ju_i][ju_j] = "."
+            matriz[ju_i][ju_j+1] = "W"
+    return matriz
+
+def contarb_B(matriz,letra):
+    count = 0
+    for i in range(len(matriz)):
+        for j in range(len(matriz[0])):
+            if matriz[i][j] == str(letra):
+                count+=1
+    return count
+
+def instrucciones(matriz,pasos):
+    cantb = (contarb_B(matriz,"b"))
+    for i in range(len(pasos)):
+        cantB = (contarb_B(matriz,"B"))
+        if cantb == cantB:
+            break
+        if pasos[i] == "D":
+            matriz = down(matriz)
+        elif pasos[i] == "U":
+            matriz = up(matriz)
+        elif pasos[i] == "L":
+            matriz = left(matriz)
+        else:
+            matriz = right(matriz)
+    return matriz
+
+def main():
+    cases = list(map(int, stdin.readline().strip().split()))
+    count = 1
+    while cases[0] != 0 and cases[1] != 0:
+        matriz = []
+        for i in range(cases[0]):
+            temp = []
+            for i in stdin.readline().strip():
+                temp.append(i)
+            matriz.append(temp)
+        pasos = [str(i) for i in stdin.readline().strip()]
+        rest = instrucciones(matriz,pasos)
+        ca = contarb_B(rest,"b")
+        if ca == 0:
+            print("Game {}: complete".format(count))
+        else:
+            print("Game {}: incomplete".format(count))
+        count+=1
+        for fila in rest:
+            print("".join(map(str,fila)))
+        cases = list(map(int, stdin.readline().strip().split()))
+main()	
